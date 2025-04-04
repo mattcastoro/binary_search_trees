@@ -1,1 +1,1 @@
-# binary_search_trees
+To build a balanced binary search tree (BST).
