@@ -7,3 +7,9 @@ prettyPrint(tree.root);
 
 // tree.deleteItem(67);
 // prettyPrint(tree.root);
+
+tree.levelOrder(value => { console.log(value) });
+// tree.levelOrder();
+// const collected = [];
+// tree.levelOrder(value => { collected.push(value) });
+// console.log(collected);
