@@ -48,8 +48,40 @@ class Tree {
     }
   }
 
-  delete(value) {
+  deleteItem(value) {
+    this.root = this.deleteRecur(this.root, value);
+  }
 
+  deleteRecur(node, value) {
+    if (!node) {
+      return null;
+    }
+    if (value < node.data) {
+      node.left = this.deleteRecur(node.left, value);
+    } else if (value > node.data) {
+      node.right = this.deleteRecur(node.right, value);
+    } else {
+      if (!node.left && !node.right) {
+        return null;
+      }
+      if (!node.left) {
+        return node.right;
+      }
+      if (!node.right) {
+        return node.left;
+      }
+      const heir = this.findMin(node.right) 
+      node.data = heir.data;
+      node.right = this.deleteRecur(node.right, heir.data);
+    }
+    return node;
+  }
+
+  findMin(node) {
+    while (node.left) {
+      node = node.left;
+    }
+    return node;
   }
 
   find(value) {
