@@ -20,6 +20,53 @@ class Tree {
     return root;
   }
 
+  insert(value) {
+    if (this.find(value)) {
+      console.log(`${value} already exists in the tree`);
+      return;
+    }
+    const newNode = new Node(value);
+    if (!this.root) {
+      this.root = newNode;
+      return;
+    }
+    let current = this.root;
+    while (true) {
+      if (value < current.data) {
+        if (!current.left) {
+          current.left = newNode;
+          return;
+        }
+        current = current.left;
+      } else {
+        if (!current.right) {
+          current.right = newNode;
+          return;
+        }
+        current = current.right;
+      }
+    }
+  }
+
+  delete(value) {
+
+  }
+
+  find(value) {
+    let current = this.root;
+    while (current) {
+      if (value === current.data) {
+        return current;
+      } 
+      if (value < current.data) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
+    return false;
+  }
+
   sortAndRemoveDuplicates(arr) {
     const uniqueArr = [...new Set(arr)];
     uniqueArr.sort((a, b) => a - b);
