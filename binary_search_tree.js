@@ -102,10 +102,14 @@ class Tree {
     return false;
   }
 
-  levelOrder(callback) {
+  validateCallback(callback) {
     if (typeof callback !== 'function') {
       throw new Error('A callback function must be provided.');
     }
+  }
+
+  levelOrder(callback) {
+    this.validateCallback(callback);
     if (!this.root) {
       return;
     }
@@ -120,6 +124,103 @@ class Tree {
         queue.push(current.right);
       }
     }
+  }
+
+  inOrder(callback) {
+    this.validateCallback(callback);
+    function traverse(node) {
+      if (!node) {
+        return;
+      }
+      traverse(node.left);
+      callback(node.data);
+      traverse(node.right);
+    }
+    traverse(this.root);
+  }
+
+  preOrder(callback) {
+    this.validateCallback(callback);
+    function traverse(node) {
+      if (!node) {
+        return;
+      }
+      callback(node.data);
+      traverse(node.left);
+      traverse(node.right);
+    }
+    traverse(this.root);
+  }
+
+  postOrder(callback) {
+    this.validateCallback(callback);
+    function traverse(node) {
+      if (!node) {
+        return;
+      }
+      traverse(node.left);
+      traverse(node.right);
+      callback(node.data);
+    }
+    traverse(this.root);
+  }
+
+  height(value) {
+    const node = this.find(value);
+    if (!node) {
+      return null;
+    }
+    const calcHeight = (node) => {
+      if(!node) {
+        return null;
+      }
+      const left = calcHeight(node.left);
+      const right = calcHeight(node.right);
+      return 1 + Math.max(left, right);
+    }
+    return calcHeight(node);
+  }
+
+  depth(value) {
+    let current = this.root;
+    let depth = 0;
+    while (current) {
+      if (value === current.data) {
+        return depth;
+      }
+      if (value < current.data) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+      depth++;
+    }
+    return null;
+  }
+
+  isBalanced() {
+    const check = (node) => {
+      if (!node) {
+        return { balanced: true, height: -1 };
+      }
+      const left = check(node.left);
+      const right = check(node.right);
+      const balanced = 
+        left.balanced &&
+        right.balanced &&
+        Math.abs(left.height - right.height) <= 1;
+      return {
+        balanced,
+        height: 1 + Math.max(left.height, right.height)
+      };
+    };
+    return check(this.root).balanced;
+  }
+
+  rebalance() {
+    const values = [];
+    this.inOrder(value => values.push(value));
+    this.root = this.buildTree(values);
   }
 
 }
